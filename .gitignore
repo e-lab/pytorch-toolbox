@@ -1,0 +1,8 @@
+.ipynb_checkpoints
+.DS_Store
+*.t7
+*.sw*
+*.net
+*.*~
+*.pth
+*.pth.tar
