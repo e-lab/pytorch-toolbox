@@ -23,7 +23,7 @@ torch.save(model_dict, 'model_cpu.pth')
 
 # example load 
 ```
-test1 = torch.load('model_cpu.pth')
-model = test1['model_def']
-model.load_state_dict(test1['weights'])
+model_dict = torch.load('model_cpu.pth')
+model = model_dict['model_def']
+model.load_state_dict( model_dict['weights'] )
 ```
