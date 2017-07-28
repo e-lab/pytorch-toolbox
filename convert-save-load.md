@@ -20,6 +20,10 @@ model.load_state_dict(new_state_dict)
 model.cpu()
 ```
 
+See: https://discuss.pytorch.org/t/solved-keyerror-unexpected-key-module-encoder-embedding-weight-in-state-dict/1686/3
+
+And: https://discuss.pytorch.org/t/loading-weights-for-cpu-model-while-trained-on-gpu/1032
+
 # convert to list of model and weights and save:
 ```
 model_dict={}
