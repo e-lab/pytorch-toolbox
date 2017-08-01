@@ -133,8 +133,6 @@ class Exporter:
             (check,param)=check_if_linear_weight(o[0])
             if check:
                 self.tensor(param)
-            #elif o[0] is None:
-            #    self.input()
         for o in obj.next_functions:
             (check,param)=check_parameter_class(o[0])
             if check:
