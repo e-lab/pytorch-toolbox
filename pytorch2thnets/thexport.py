@@ -75,6 +75,7 @@ class Exporter:
     def __init__(self, f):
         self.f = f
         self.output_id = 0
+        self.objects = {}
         #Write 24 bytes header
         f.write(str.encode('PyTorch Graph Dump 1.00'))
         f.write(bytearray(c_int8(0))) #String terminator
@@ -84,13 +85,9 @@ class Exporter:
         self.f.write(bytearray(c_int8(1))) #Input id
     def function(self, name, obj):
         self.f.write(bytearray(c_int8(2))) #Function id
-        if name=='torch.nn._functions.conv.ConvNd' or name=='torch.nn._functions.batchnorm.BatchNorm':
-            self.f.write(bytearray(c_int32(self.output_id))) #Unique ID of the output of this function
-            self.output_id = self.output_id + 1
-        else:
-            obj.output_id = self.output_id
-            self.output_id = self.output_id + 1
-            self.f.write(bytearray(c_int32(obj.output_id))) #Unique ID of the output of this function
+        self.objects[obj] = self.output_id
+        self.f.write(bytearray(c_int32(self.output_id))) #Unique ID of the output of this function
+        self.output_id = self.output_id + 1
         self.f.write(str.encode(name))     #Function name
         self.f.write(bytearray(c_int8(0))) #Function name terminator
         if hasattr(obj, 'inplace'):
@@ -123,8 +120,8 @@ class Exporter:
         self.function(check_layer_class(obj)[1], obj)
         for o in obj.next_functions:
             if check_layer_class(o[0])[0]:
-                if hasattr(o[0], 'output_id'):
-                    writefunctionid(self.f, o[0].output_id)
+                if o[0] in self.objects:
+                    writefunctionid(self.f, self.objects[o[0]])
                 else:
                     self.write(o[0])
         if obj.next_functions[0][0] is None:
