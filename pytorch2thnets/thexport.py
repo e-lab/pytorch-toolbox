@@ -59,6 +59,8 @@ def check_layer_class(obj):
         return (True,'torch.autograd._functions.basic_ops.Add')
     elif (str(obj.__class__)=="<class 'BatchNormBackward'>"):
         return (True,'torch.nn._functions.batchnorm.BatchNorm')
+    elif (str(obj.__class__)=="<class 'torch.autograd.function.ConcatBackward'>"):
+        return (True,'torch.nn._functions.concat.Concat')
     return (False,'')
 
 def check_parameter_class(obj):
