@@ -60,7 +60,7 @@ def check_layer_class(obj):
     elif (str(obj.__class__)=="<class 'BatchNormBackward'>"):
         return (True,'torch.nn._functions.batchnorm.BatchNorm')
     elif (str(obj.__class__)=="<class 'torch.autograd.function.ConcatBackward'>"):
-        return (True,'torch.nn._functions.concat.Concat')
+        return (True,'torch.autograd._functions.tensor.Concat')
     return (False,'')
 
 def check_parameter_class(obj):
@@ -143,6 +143,6 @@ def save(path, output):
         e = Exporter(f)
         e.write(output.grad_fn)
 
-#model=models.resnet152(pretrained=True).eval()
+#model=models.densenet201(pretrained=True).eval()
 #out=model(V(torch.FloatTensor(1,3,227,227)))
 #save('model.net',out)
