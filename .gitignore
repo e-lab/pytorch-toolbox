@@ -6,3 +6,6 @@
 *.*~
 *.pth
 *.pth.tar
+*.gv
+*.pdf
+*.svg
