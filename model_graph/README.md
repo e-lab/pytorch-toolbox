@@ -17,4 +17,5 @@ python3 visualize.py --detailed
 ```
 
 Adapted from: https://github.com/szagoruyko/functional-zoo/blob/master/visualize.py
+
 Also see: https://discuss.pytorch.org/t/print-autograd-graph/692
