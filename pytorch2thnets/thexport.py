@@ -48,11 +48,11 @@ def check_layer_class(obj):
         return (True,'torch.nn._functions.dropout.Dropout')
     elif (str(obj.__class__)=="<class 'torch.autograd.function.ViewBackward'>"):
         return (True,'torch.autograd._functions.tensor.View')
-    elif (str(obj.__class__)=="<class 'torch.nn._functions.thnn.pooling.MaxPool2d'>"):
+    elif (str(obj.__class__)=="<class 'torch.autograd.function.MaxPool2dBackward'>"):
         return (True,'torch.nn._functions.thnn.pooling.MaxPool2d')
     elif (str(obj.__class__)=="<class 'ConvNdBackward'>"):
         return (True,'torch.nn._functions.conv.ConvNd')
-    elif (str(obj.__class__)=="<class 'torch.nn._functions.thnn.pooling.AvgPool2d'>"):
+    elif (str(obj.__class__)=="<class 'torch.autograd.function.AvgPool2dBackward'>"):
         return (True,'torch.nn._functions.thnn.pooling.AvgPool2d')
     elif (str(obj.__class__)=="<class 'torch.autograd.function.AddBackward'>"):
         obj.inplace=True
