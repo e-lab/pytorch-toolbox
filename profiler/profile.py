@@ -3,8 +3,6 @@ import argparse
 import torch
 import torch.nn as nn
 
-from torch.autograd import Variable as V
-
 def count_conv2d(m, x, y):
     x = x[0]
 
@@ -55,7 +53,7 @@ def count_softmax(m, x, y):
     total_ops = batch_size * (total_exp + total_add + total_div)
 
     m.total_ops += torch.Tensor([int(total_ops)])
-    
+
 def count_maxpool(m, x, y):
     kernel_ops = torch.prod(torch.Tensor([m.kernel_size])) - 1
     num_elements = y.numel()
@@ -81,14 +79,14 @@ def count_linear(m, x, y):
 
     m.total_ops += torch.Tensor([int(total_ops)])
 
-def profile(model, batch_size, input_size, custom_ops = {}):
+def profile(model, input_size, custom_ops = {}):
 
     model.eval()
-    
+
     def add_hooks(m):
         if len(list(m.children())) > 0: return
-        m.register_buffer('total_ops', 0)
-        m.register_buffer('total_params', 0)
+        m.register_buffer('total_ops', torch.zeros(1))
+        m.register_buffer('total_params', torch.zeros(1))
 
         for p in m.parameters():
             m.total_params += torch.Tensor([p.numel()])
@@ -112,7 +110,7 @@ def profile(model, batch_size, input_size, custom_ops = {}):
 
     model.apply(add_hooks)
 
-    x = V(torch.zeros((batch_size, *input_size)))
+    x = torch.zeros(input_size)
     model(x)
 
     total_ops = 0
@@ -121,16 +119,14 @@ def profile(model, batch_size, input_size, custom_ops = {}):
         if len(list(m.children())) > 0: continue
         total_ops += m.total_ops
         total_params += m.total_params
-    total_ops = total_ops[0]
-    total_params = total_params[0]
+    total_ops = total_ops
+    total_params = total_params
 
     return total_ops, total_params
-    
+
 def main(args):
     model = torch.load(args.model)
-
-    total_ops, total_params = profile(model, args.batch_size, args.input_size)
-
+    total_ops, total_params = profile(model, args.input_size)
     print("#Ops: %f GOps"%(total_ops/1e9))
     print("#Parameters: %f M"%(total_params/1e6))
 
@@ -138,8 +134,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="pytorch model profiler")
     parser.add_argument("model", help="model to profile")
     parser.add_argument("input_size", nargs='+', type=int,
-                        help="input size to network without batch")
-    parser.add_argument("--batch-size", default=1, type=int,
-                        help="batch size to compute ops for")
+                        help="input size to the network")
     args = parser.parse_args()
     main(args)
