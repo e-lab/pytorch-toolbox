@@ -19,7 +19,7 @@ def count_conv2d(m, x, y):
 
     # total ops
     num_out_elements = y.numel()
-    total_ops = num_out_elements * ops * m.groups
+    total_ops = num_out_elements * ops
 
     # incase same conv is used multiple times
     m.total_ops += torch.Tensor([int(total_ops)])
